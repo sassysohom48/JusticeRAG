@@ -1,0 +1,29 @@
+{
+  "keyword": {
+    "name": "1. Keyword Search (BM25)",
+    "mrr@5": 0.84,
+    "ndcg@5": 0.8774,
+    "precision@1": 0.8,
+    "precision@3": 0.5333,
+    "precision@5": 0.4,
+    "avg_latency_ms": 3.83
+  },
+  "semantic": {
+    "name": "2. Semantic RAG (Dense BGE)",
+    "mrr@5": 1.0,
+    "ndcg@5": 1.0,
+    "precision@1": 1.0,
+    "precision@3": 0.6667,
+    "precision@5": 0.56,
+    "avg_latency_ms": 252.65
+  },
+  "hybrid": {
+    "name": "3. Hybrid Legal RAG (Ours)",
+    "mrr@5": 1.0,
+    "ndcg@5": 0.9771,
+    "precision@1": 1.0,
+    "precision@3": 0.6,
+    "precision@5": 0.48,
+    "avg_latency_ms": 348.4
+  }
+}
