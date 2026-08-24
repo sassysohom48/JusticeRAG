@@ -87,19 +87,20 @@ class BM25SearchEngine:
             query_tokens = query.lower().split()
 
         scores = self.bm25.get_scores(query_tokens)
-        max_score = max(scores) if len(scores) > 0 and max(scores) > 0 else 1.0
-
-        # Sort indices by score descending
-        ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
+        matching_indices = [i for i in range(len(scores)) if scores[i] > 0]
+        if matching_indices:
+            ranked_indices = sorted(matching_indices, key=lambda i: scores[i], reverse=True)[:top_k]
+        else:
+            ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:top_k]
 
         results = []
         for idx in ranked_indices:
             raw_score = float(scores[idx])
-            # Normalize BM25 score to 0.0 - 1.0 range using sigmoid-like scaling
+            # Normalize BM25 score to 0.0 - 1.0 range
             if raw_score > 0:
-                normalized_score = round(min(0.98, 0.45 + (raw_score / (max_score * 1.5)) * 0.5), 4)
+                normalized_score = round(min(0.98, 0.50 + (raw_score / (max_score * 1.5)) * 0.48), 4)
             else:
-                normalized_score = 0.35
+                normalized_score = 0.20
 
             case_payload = {
                 "id": self.cases[idx]["id"],

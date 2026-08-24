@@ -23,6 +23,8 @@ export default function Home() {
   const [comparisonText, setComparisonText] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+  const [activeMode, setActiveMode] = useState("semantic");
+
   const sampleQueries = [
     "A tenant was evicted without proper notice. Find similar cases.",
     "Landlord claiming bona fide requirement under Rent Control Act.",
@@ -30,18 +32,20 @@ export default function Home() {
     "Notice to quit under Section 106 Transfer of Property Act mandatory or not?"
   ];
 
-  const handleSearch = async (e?: React.FormEvent, searchQuery?: string) => {
+  const handleSearch = async (e?: React.FormEvent, searchQuery?: string, searchMode?: string) => {
     if (e) e.preventDefault();
-    const q = searchQuery || query;
+    const q = searchQuery !== undefined ? searchQuery : query;
+    const m = searchMode !== undefined ? searchMode : mode;
     if (!q.trim()) return;
 
     setLoading(true);
     setComparisonText(null);
+    setActiveMode(m);
     try {
       const res = await fetch("http://localhost:8080/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q, mode, top_k: 4 }),
+        body: JSON.stringify({ query: q, mode: m, top_k: 4 }),
       });
       const data = await res.json();
       const cases = data.results || [];
@@ -53,6 +57,13 @@ export default function Home() {
       alert("Failed to connect to JusticeRAG Backend on http://localhost:8080. Please ensure the backend is running.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleModeChange = (newMode: string) => {
+    setMode(newMode);
+    if (query.trim()) {
+      handleSearch(undefined, query, newMode);
     }
   };
 
@@ -164,7 +175,7 @@ export default function Home() {
                     name="mode"
                     value="semantic"
                     checked={mode === "semantic"}
-                    onChange={(e) => setMode(e.target.value)}
+                    onChange={() => handleModeChange("semantic")}
                     className="accent-purple-500"
                   />
                   <span>Dense Semantic RAG</span>
@@ -175,7 +186,7 @@ export default function Home() {
                     name="mode"
                     value="keyword"
                     checked={mode === "keyword"}
-                    onChange={(e) => setMode(e.target.value)}
+                    onChange={() => handleModeChange("keyword")}
                     className="accent-purple-500"
                   />
                   <span>Keyword (BM25)</span>
@@ -186,7 +197,7 @@ export default function Home() {
                     name="mode"
                     value="hybrid"
                     checked={mode === "hybrid"}
-                    onChange={(e) => setMode(e.target.value)}
+                    onChange={() => handleModeChange("hybrid")}
                     className="accent-purple-500"
                   />
                   <span>Hybrid RAG (RRF)</span>
@@ -208,7 +219,7 @@ export default function Home() {
                   key={idx}
                   onClick={() => {
                     setQuery(sample);
-                    handleSearch(undefined, sample);
+                    handleSearch(undefined, sample, mode);
                   }}
                   className="text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all border border-slate-700/60 text-left"
                 >
@@ -227,6 +238,9 @@ export default function Home() {
                 <span>📚 Retrieved Legal Precedents</span>
                 <span className="text-xs font-mono bg-purple-950 text-purple-300 border border-purple-800 px-2 py-0.5 rounded-full">
                   {results.length} cases
+                </span>
+                <span className="text-xs font-mono bg-indigo-950 text-indigo-300 border border-indigo-800 px-2.5 py-0.5 rounded-full">
+                  Mode: {activeMode === "keyword" ? "Keyword (BM25)" : activeMode === "semantic" ? "Dense Semantic RAG" : "Hybrid Legal RAG (RRF)"}
                 </span>
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
