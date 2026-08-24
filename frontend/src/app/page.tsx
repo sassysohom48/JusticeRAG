@@ -351,49 +351,91 @@ export default function Home() {
 
         {/* Multi-Case Comparison Modal */}
         {showModal && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-3xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/50">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">⚖️</span>
-                  <h3 className="text-lg font-bold text-white">
-                    Multi-Precedent Comparative Legal Synthesis
-                  </h3>
+          <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+            <div className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/60">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">⚖️</span>
+                  <div>
+                    <h3 className="text-lg font-bold text-white leading-none">
+                      Multi-Precedent Comparative Legal Synthesis
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Cross-statutory doctrine conflict, factual distinction & precedence hierarchy
+                    </p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+                  className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="p-6 overflow-y-auto space-y-4 text-slate-200 text-sm leading-relaxed">
+              <div className="p-6 overflow-y-auto space-y-4 text-slate-200 text-sm leading-relaxed bg-slate-950/30">
                 {comparing ? (
-                  <div className="py-12 text-center space-y-3">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
-                    <div className="text-purple-300 font-medium">
+                  <div className="py-16 text-center space-y-4">
+                    <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
+                    <div className="text-purple-300 font-semibold text-base">
                       Gemini LLM is synthesizing legal doctrines & statutory conflicts...
                     </div>
-                    <div className="text-xs text-slate-500">
-                      Cross-analyzing factual distinctions and precedential hierarchy
+                    <div className="text-xs text-slate-500 max-w-md mx-auto">
+                      Comparing Transfer of Property Act notices vs. State Rent Control Act statutory provisions across judicial benches.
                     </div>
                   </div>
                 ) : (
-                  <div className="prose prose-invert max-w-none text-slate-200 whitespace-pre-wrap">
+                  <div className="font-mono text-xs md:text-sm bg-slate-950 p-5 rounded-xl border border-slate-800 text-slate-200 whitespace-pre-wrap leading-relaxed shadow-inner">
                     {comparisonText}
                   </div>
                 )}
               </div>
 
-              <div className="p-4 border-t border-slate-800 bg-slate-950/50 flex justify-between items-center text-xs text-slate-400">
-                <span>Grounded on verified Indian case judgments</span>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                >
-                  Close Synthesis
-                </button>
+              <div className="p-4 border-t border-slate-800 bg-slate-950/60 flex flex-wrap justify-between items-center gap-3 text-xs text-slate-400">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Grounded on verified Indian Supreme Court judgments</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      if (comparisonText) {
+                        navigator.clipboard.writeText(comparisonText);
+                        alert("Comparative legal synthesis copied to clipboard!");
+                      }
+                    }}
+                    disabled={!comparisonText || comparing}
+                    className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-lg font-medium transition-colors border border-slate-700 disabled:opacity-40 flex items-center gap-1.5"
+                  >
+                    📋 Copy Synthesis
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (comparisonText) {
+                        const blob = new Blob([comparisonText], { type: "text/markdown" });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = "JusticeRAG_Legal_Synthesis_Memo.md";
+                        a.click();
+                        URL.revokeObjectURL(url);
+                      }
+                    }}
+                    disabled={!comparisonText || comparing}
+                    className="bg-purple-900/60 hover:bg-purple-900 text-purple-200 px-3.5 py-2 rounded-lg font-medium transition-colors border border-purple-700/60 disabled:opacity-40 flex items-center gap-1.5"
+                  >
+                    📥 Export Memo (.md)
+                  </button>
+
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>

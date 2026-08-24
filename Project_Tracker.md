@@ -128,8 +128,8 @@ graph TD
 | **Phase 5** | **LLM Reasoning & Structured Field Extraction** | ✅ **DONE** | `backend/main.py` (Gemini 6 structured fields extraction & fallback heuristic engine) |
 | **Phase 6** | **Sparse Indexing & Keyword BM25 Search** | ✅ **DONE** | `backend/bm25_search.py`, `rank-bm25` legal tokenizer & exact citation matching |
 | **Phase 7** | **Hybrid RAG & Reciprocal Rank Fusion (RRF)** | ✅ **DONE** | `backend/hybrid_search.py`, Reciprocal Rank Fusion ($k=60$) & multi-modal score consensus |
-| **Phase 8** | **Multi-Case Comparative Synthesis Engine** | 📋 **PLANNED** | Multi-case comparison matrix UI & Gemini legal reasoning prompt |
-| **Phase 9** | **Benchmark & Evaluation Suite** | 📋 **PLANNED** | `backend/evaluate.py` (MRR, NDCG, RAGAS metrics) |
+| **Phase 8** | **Multi-Case Comparative Synthesis Engine** | ✅ **DONE** | `backend/main.py` (`/compare` matrix route), copy & markdown export in UI |
+| **Phase 9** | **Benchmark & Quantitative Evaluation Suite** | ✅ **DONE** | `backend/evaluate.py` (Automated IR evaluation: MRR@5, NDCG@5, Precision@K, Latency) |
 
 ---
 
@@ -181,10 +181,26 @@ When presenting JusticeRAG to faculty, examiners, or project guides, refer to th
 
 ---
 
-## 🚀 8. Next Steps & Immediate Action Items
+## 🚀 8. How to Run & Present JusticeRAG (Quick Guide)
 
-1. **Activate Gemini Structured Extraction**: Ensure `backend/.env` contains a valid `GEMINI_API_KEY` and format `/search` to return all 6 legal fields dynamically.
-2. **Implement BM25 Keyword Search**: Integrate `rank-bm25` in `backend/` to enable real-time keyword vs. semantic switching.
-3. **Build Reciprocal Rank Fusion (RRF)**: Implement the hybrid fusion formula:
-   $$RRF\_Score(d) = \sum_{m \in M} \frac{1}{k + r_m(d)}$$
-4. **Wire up the Frontend Comparison Modal**: Connect the "⚖️ Compare these cases" button to render a comprehensive comparative analysis modal with side-by-side statutory matrices.
+1. **Start Backend Server**:
+   ```bash
+   cd backend
+   .\venv\Scripts\activate
+   uvicorn main:app --reload --port 8080
+   ```
+
+2. **Start Frontend Web UI**:
+   ```bash
+   cd frontend
+   npm run dev
+   # Navigate to http://localhost:3000
+   ```
+
+3. **Run Automated Research Evaluation Benchmark**:
+   ```bash
+   cd backend
+   python evaluate.py
+   # View quantitative results in backend/evaluation_report.md
+   ```
+

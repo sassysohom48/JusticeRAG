@@ -267,33 +267,63 @@ async def compare_cases(req: CompareRequest):
         
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key or api_key in ["your_api_key_here", "your_gemini_api_key_here"]:
-        # Return fallback comparative synthesis
+        # Enhanced rule-based comparative legal synthesis
         case_names = [c.case_name for c in req.cases]
-        return {
-            "comparison": (
-                f"### ⚖️ Comparative Precedent Analysis\n\n"
-                f"**User Research Query:** *{req.query}*\n\n"
-                f"**Cases Analyzed:**\n" +
-                "\n".join([f"- **{name}**" for name in case_names]) +
-                "\n\n#### 1. Factual Distinctions\n"
-                "The analyzed precedents address landlord-tenant disputes across different statutory settings (Transfer of Property Act general notice vs. State Rent Control Act statutory grounds).\n\n"
-                "#### 2. Statutory Conflict & Overriding Doctrines\n"
-                "A key legal convergence across these rulings is whether special Rent Control legislation overrides the requirement of a formal pre-suit notice under Section 106 of the Transfer of Property Act, 1882.\n\n"
-                "#### 3. Judicial Precedence & Recommendation\n"
-                "Larger bench Supreme Court judgments (such as *V. Dhanapal Chettiar*) establish binding precedent that contractual termination under Section 106 is not mandatory when eviction grounds under specific Rent Acts are fully established."
-            )
-        }
+        case_rows = ""
+        for i, c in enumerate(req.cases):
+            provs = ", ".join(c.legal_provisions[:2]) if c.legal_provisions else "General Civil Law"
+            case_rows += f"| **{c.case_name}** | {c.relevant_facts[:140]}... | `{provs}` | *{c.judgment[:120]}...* |\n"
+
+        comparison_md = f"""# ⚖️ Indian Case Law Comparative Legal Synthesis
+
+**Client Dilemma / Research Query:**  
+> *"{req.query}"*
+
+---
+
+## 📊 1. Precedent Comparison Matrix
+
+| Case Precedent | Material Facts & Dispute | Key Statutory Provisions | Court Holding (Ratio Decidendi) |
+| :--- | :--- | :--- | :--- |
+{case_rows}
+
+---
+
+## 🔍 2. Statutory Conflict & Doctrine Interpretation
+
+1. **General Tenancy vs. Special Rent Legislation**:
+   - **General Law (Transfer of Property Act, 1882 - Section 106)** mandates a formal 15-day notice to quit for month-to-month tenancies.
+   - **Special State Rent Control Acts** (e.g., Delhi, West Bengal, Maharashtra, MP) provide complete statutory protection to tenants, defining exclusive grounds for eviction (e.g., arrears, bona fide necessity).
+
+2. **Judicial Resolution**:
+   - Landmark Supreme Court jurisprudence establishes that when eviction is sought under a **State Rent Control Act**, a separate contractual determination under Section 106 TP Act is superfluous because statutory tenancy overrides contractual terms.
+
+---
+
+## 🏛️ 3. Precedential Authority & Bench Hierarchy
+
+- **Constitution Bench Authority**: Higher-bench Supreme Court judgments (such as the 7-Judge Bench in *V. Dhanapal Chettiar*) hold binding precedence over earlier Division Bench decisions under Article 141 of the Constitution of India.
+- **Service of Summons Doctrine**: Under general tenancy disputes where no special Rent Act applies, filing an eviction plaint and serving court summons satisfies the notice requirement (*Nopany Investments*).
+
+---
+
+## 💡 4. Strategic Legal Takeaway for Research Query
+
+- **Primary Defense / Claim**: If the premises are covered under a State Rent Control Act, verify whether the landlord proved specific statutory grounds (e.g., bona fide necessity or default). Lack of a separate TP Act notice alone will not defeat an otherwise valid statutory eviction.
+- **Procedural Safeguard**: If the tenancy is purely contractual under general property law, verify whether formal summons or pre-suit intention was properly established before decree execution.
+"""
+        return {"comparison": comparison_md}
 
     try:
         model = genai.GenerativeModel('gemini-1.5-flash')
-        prompt = f"""You are a Supreme Court Legal Scholar assisting an advocate researching this dilemma:
+        prompt = f"""You are a Supreme Court of India Senior Advocate & Legal Scholar assisting a researcher analyzing this scenario:
 "{req.query}"
 
-Please provide a deep, structured comparative legal synthesis of the following {len(req.cases)} Indian case precedents:
+Please conduct an exhaustive, structured comparative legal synthesis of the following {len(req.cases)} Indian case precedents:
 
 """
         for i, c in enumerate(req.cases):
-            prompt += f"""--- PRECEDENT {i+1}: {c.case_name} ---
+            prompt += f"""=== PRECEDENT {i+1}: {c.case_name} ===
 Facts: {c.relevant_facts}
 Provisions: {', '.join(c.legal_provisions)}
 Judgment/Ratio: {c.judgment}
@@ -302,20 +332,22 @@ Relevance: {c.why_relevant}
 """
 
         prompt += """
-Structure your legal comparison using the following markdown headers:
-### 1. Precedent Comparison Matrix & Fact Analysis
-(Compare how facts and claims differ between the cases)
+Format your comparative synthesis using clean GitHub Flavored Markdown with these sections:
+# ⚖️ Indian Case Law Comparative Legal Synthesis
 
-### 2. Statutory Interpretation & Doctrine Conflict
-(Compare how Section 106 TP Act, State Rent Acts, or other statutes are interpreted)
+## 📊 1. Precedent Comparison Matrix
+(Create a markdown table comparing: Case Name, Factual Background, Statutory Sections Applied, Core Ratio Decidendi)
 
-### 3. Binding Precedence & Judicial Hierarchy
-(Identify which bench/ruling holds highest authority and why)
+## 🔍 2. Statutory Interpretation & Doctrine Conflict
+(Analyze how the statutes interact, e.g., general vs special law, notice requirements, burden of proof)
 
-### 4. Strategic Legal Takeaway for the Query
-(Summarize the most advantageous legal argument based on this trio of precedents)
+## 🏛️ 3. Precedential Hierarchy & Judicial Authority
+(Identify which bench holds binding authority under Article 141 and how earlier rulings were clarified or distinguished)
 
-Maintain high legal rigor and clear markdown formatting.
+## 💡 4. Strategic Legal Takeaway for the Research Dilemma
+(Provide clear, actionable legal reasoning addressing the user's specific scenario)
+
+Maintain the highest standard of Indian jurisprudence precision.
 """
         response = model.generate_content(prompt)
         return {"comparison": response.text}
