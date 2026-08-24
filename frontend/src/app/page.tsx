@@ -32,6 +32,8 @@ export default function Home() {
     "Notice to quit under Section 106 Transfer of Property Act mandatory or not?"
   ];
 
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+
   const handleSearch = async (e?: React.FormEvent, searchQuery?: string, searchMode?: string) => {
     if (e) e.preventDefault();
     const q = searchQuery !== undefined ? searchQuery : query;
@@ -42,7 +44,7 @@ export default function Home() {
     setComparisonText(null);
     setActiveMode(m);
     try {
-      const res = await fetch("http://localhost:8080/search", {
+      const res = await fetch(`${API_BASE_URL}/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q, mode: m, top_k: 4 }),
@@ -54,7 +56,7 @@ export default function Home() {
       setSelectedCaseIds(cases.slice(0, 3).map((c: CasePrecedent) => c.id));
     } catch (error) {
       console.error("Error searching:", error);
-      alert("Failed to connect to JusticeRAG Backend on http://localhost:8080. Please ensure the backend is running.");
+      alert(`Failed to connect to JusticeRAG Backend on ${API_BASE_URL}. Please ensure the backend is running.`);
     } finally {
       setLoading(false);
     }
@@ -85,7 +87,7 @@ export default function Home() {
     setComparing(true);
     setShowModal(true);
     try {
-      const res = await fetch("http://localhost:8080/compare", {
+      const res = await fetch(`${API_BASE_URL}/compare`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, cases: selectedCases }),
