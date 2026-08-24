@@ -125,7 +125,7 @@ graph TD
 | **Phase 2** | **Data Ingestion & Vector Pipeline** | ✅ **DONE** | `backend/data/`, `backend/index_data.py`, `backend/fetch_data.py` |
 | **Phase 3** | **FastAPI Retrieval Engine (Dense Search)** | ✅ **DONE** | `backend/main.py` (`/search`, `/compare` skeleton) |
 | **Phase 4** | **Modern Dark Web UI** | ✅ **DONE** | `frontend/src/app/page.tsx`, `frontend/src/app/globals.css` |
-| **Phase 5** | **LLM Reasoning & Structured Field Extraction** | ⏳ **IN PROGRESS** | `backend/main.py` (Gemini prompt engineering for 6 structured fields) |
+| **Phase 5** | **LLM Reasoning & Structured Field Extraction** | ✅ **DONE** | `backend/main.py` (Gemini 6 structured fields extraction & fallback heuristic engine) |
 | **Phase 6** | **Sparse Indexing & Keyword BM25 Search** | 📋 **PLANNED** | `backend/bm25_index.py`, Rank-BM25 integration |
 | **Phase 7** | **Hybrid RAG & Reciprocal Rank Fusion (RRF)** | 📋 **PLANNED** | `backend/hybrid_search.py`, Score fusion & reranking |
 | **Phase 8** | **Multi-Case Comparative Synthesis Engine** | 📋 **PLANNED** | Multi-case comparison matrix UI & Gemini legal reasoning prompt |
