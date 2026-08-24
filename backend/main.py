@@ -204,6 +204,8 @@ CRITICAL RULES:
             for i, c in enumerate(retrieved_cases)
         ]
 
+from bm25_search import bm25_engine
+
 @app.post("/search")
 async def search(req: SearchRequest):
     if not req.query.strip():
@@ -211,30 +213,48 @@ async def search(req: SearchRequest):
         
     limit = req.top_k or 4
     
-    if req.mode in ["semantic", "hybrid", "keyword"]:
-        # Currently semantic dense search with BGE
+    if req.mode == "keyword":
+        # Mode 1: Sparse Lexical Search (BM25)
+        bm25_hits = bm25_engine.search(req.query, top_k=limit)
+        retrieved_cases = [
+            {"payload": payload, "score": score}
+            for payload, score in bm25_hits
+        ]
+    elif req.mode == "semantic":
+        # Mode 2: Dense Semantic Vector Search (BGE-small + Qdrant)
         query_vector = embedder.encode(req.query).tolist()
         results = qdrant.query_points(
             collection_name=COLLECTION_NAME,
             query=query_vector,
             limit=limit
         )
-        
         retrieved_cases = [
             {"payload": hit.payload, "score": hit.score}
             for hit in results.points
         ]
-        
-        # Generative AI Reasoning & Structured Extraction (Phase 5)
-        structured_cases = await analyze_cases_with_gemini(req.query, retrieved_cases)
-        return {
-            "query": req.query,
-            "mode": req.mode,
-            "total_results": len(structured_cases),
-            "results": structured_cases
-        }
+    elif req.mode == "hybrid":
+        # Mode 3: Semantic fallback until Phase 7 RRF is wired
+        query_vector = embedder.encode(req.query).tolist()
+        results = qdrant.query_points(
+            collection_name=COLLECTION_NAME,
+            query=query_vector,
+            limit=limit
+        )
+        retrieved_cases = [
+            {"payload": hit.payload, "score": hit.score}
+            for hit in results.points
+        ]
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported retrieval mode: {req.mode}")
+        
+    # Generative AI Reasoning & Structured Extraction (Phase 5)
+    structured_cases = await analyze_cases_with_gemini(req.query, retrieved_cases)
+    return {
+        "query": req.query,
+        "mode": req.mode,
+        "total_results": len(structured_cases),
+        "results": structured_cases
+    }
 
 @app.post("/compare")
 async def compare_cases(req: CompareRequest):

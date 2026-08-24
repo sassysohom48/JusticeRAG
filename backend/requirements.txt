@@ -6,3 +6,4 @@ google-generativeai
 datasets
 pydantic
 python-dotenv
+rank-bm25
