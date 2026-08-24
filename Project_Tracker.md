@@ -127,7 +127,7 @@ graph TD
 | **Phase 4** | **Modern Dark Web UI** | ✅ **DONE** | `frontend/src/app/page.tsx`, `frontend/src/app/globals.css` |
 | **Phase 5** | **LLM Reasoning & Structured Field Extraction** | ✅ **DONE** | `backend/main.py` (Gemini 6 structured fields extraction & fallback heuristic engine) |
 | **Phase 6** | **Sparse Indexing & Keyword BM25 Search** | ✅ **DONE** | `backend/bm25_search.py`, `rank-bm25` legal tokenizer & exact citation matching |
-| **Phase 7** | **Hybrid RAG & Reciprocal Rank Fusion (RRF)** | 📋 **PLANNED** | `backend/hybrid_search.py`, Score fusion & reranking |
+| **Phase 7** | **Hybrid RAG & Reciprocal Rank Fusion (RRF)** | ✅ **DONE** | `backend/hybrid_search.py`, Reciprocal Rank Fusion ($k=60$) & multi-modal score consensus |
 | **Phase 8** | **Multi-Case Comparative Synthesis Engine** | 📋 **PLANNED** | Multi-case comparison matrix UI & Gemini legal reasoning prompt |
 | **Phase 9** | **Benchmark & Evaluation Suite** | 📋 **PLANNED** | `backend/evaluate.py` (MRR, NDCG, RAGAS metrics) |
 

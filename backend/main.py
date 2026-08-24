@@ -205,6 +205,15 @@ CRITICAL RULES:
         ]
 
 from bm25_search import bm25_engine
+from hybrid_search import HybridLegalSearchEngine
+
+hybrid_engine = HybridLegalSearchEngine(
+    embedder=embedder,
+    qdrant=qdrant,
+    collection_name=COLLECTION_NAME,
+    bm25=bm25_engine,
+    rrf_k=60
+)
 
 @app.post("/search")
 async def search(req: SearchRequest):
@@ -233,16 +242,11 @@ async def search(req: SearchRequest):
             for hit in results.points
         ]
     elif req.mode == "hybrid":
-        # Mode 3: Semantic fallback until Phase 7 RRF is wired
-        query_vector = embedder.encode(req.query).tolist()
-        results = qdrant.query_points(
-            collection_name=COLLECTION_NAME,
-            query=query_vector,
-            limit=limit
-        )
+        # Mode 3: Hybrid Legal RAG (BM25 + Dense BGE + Reciprocal Rank Fusion)
+        hybrid_hits = hybrid_engine.search(req.query, top_k=limit)
         retrieved_cases = [
-            {"payload": hit.payload, "score": hit.score}
-            for hit in results.points
+            {"payload": payload, "score": score}
+            for payload, score in hybrid_hits
         ]
     else:
         raise HTTPException(status_code=400, detail=f"Unsupported retrieval mode: {req.mode}")
