@@ -12,7 +12,7 @@
 > **🌐 Live Production Web Application:** **[https://justice-rag-gilt.vercel.app](https://justice-rag-gilt.vercel.app)**
 >
 > **⚖️ Ethical & Legal Positioning Notice:**  
-> **JusticeRAG is engineered strictly as a Legal Research Assistance Platform** for advocates, researchers, judicial clerks, and law students. It is **not** legal advice and does not create an attorney-client relationship. All generative outputs are strictly grounded on verified Indian judicial records.
+> **JusticeRAG is engineered strictly as a Legal Research Assistance Platform** for advocates, researchers,judicial clerks, and law students. It is **not** legal advice and does not create an attorney-client relationship. All generative outputs are strictly grounded on verified Indian judicial records.
 
 ---
 
@@ -315,46 +315,6 @@ JusticeRAG/
 ├── Project_Tracker.md              # Complete Milestone Tracker & Defense FAQ
 └── README.md                       # Comprehensive Developer & Architecture Guide
 ```
-
----
-
-## 🌐 Version 1 Production Deployment
-
-JusticeRAG is deployed live in production using the **All-in-One Vercel Serverless Architecture**:
-
-```mermaid
-flowchart LR
-    Browser([End Users]) --> Vercel[Vercel Global Edge Network]
-    subgraph Vercel_Deployment [Unified Next.js 16 Fullstack App]
-        Vercel --> UI[React 19 / TailwindCSS UI]
-        Vercel --> SearchAPI[Serverless /api/search API Route]
-        Vercel --> CompareAPI[Serverless /api/compare API Route]
-        SearchAPI --> BM25Engine[In-Memory BM25Okapi Engine]
-        SearchAPI --> GeminiLLM[Google Gemini 1.5 Legal Synthesis]
-        CompareAPI --> GeminiLLM
-    end
-```
-
-### 🌟 1. All-in-One Vercel Deployment (Live & Recommended)
-- **Live URL**: **[https://justice-rag-gilt.vercel.app](https://justice-rag-gilt.vercel.app)**
-- **How it works**: Deploys both the frontend and the `/api/search` & `/api/compare` serverless API routes in a single repository on Vercel.
-- **Setup**:
-  1. Import `sassysohom48/JusticeRAG` on **[Vercel](https://vercel.com)**.
-  2. Set **Root Directory** to `frontend`.
-  3. Add Environment Variable: `GEMINI_API_KEY=your_key`.
-  4. Click **Deploy**.
-
----
-
-### 🐳 2. Alternative Dedicated Backend (FastAPI + Docker Compose)
-If you prefer running a dedicated long-running Python FastAPI daemon with local Qdrant vector storage on a VPS (AWS EC2 / DigitalOcean / Render):
-- Run using **Docker Compose**:
-  ```bash
-  docker compose up --build
-  ```
-- Or deploy `backend/` with `uvicorn main:app --host 0.0.0.0 --port $PORT`.
-
----
 
 ## 📜 License & Citation
 
