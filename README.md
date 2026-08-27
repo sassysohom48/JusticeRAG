@@ -318,36 +318,41 @@ JusticeRAG/
 
 ---
 
-## 🌐 Version 1 Deployment Roadmap
+## 🌐 Version 1 Production Deployment
 
-To deploy JusticeRAG Version 1 to production, follow this architecture plan:
+JusticeRAG is deployed live in production using the **All-in-One Vercel Serverless Architecture**:
 
 ```mermaid
 flowchart LR
-    Browser([End Users]) --> Vercel[Frontend: Vercel / Next.js Edge]
-    Vercel -->|HTTPS API Requests| Render[Backend: Render / Railway / AWS EC2 - FastAPI Docker]
-    Render --> QdrantCloud[(Qdrant Cloud Managed Vector DB)]
-    Render --> GeminiAPI[Google Gemini 1.5 Pro / Flash API]
+    Browser([End Users]) --> Vercel[Vercel Global Edge Network]
+    subgraph Vercel_Deployment [Unified Next.js 16 Fullstack App]
+        Vercel --> UI[React 19 / TailwindCSS UI]
+        Vercel --> SearchAPI[Serverless /api/search API Route]
+        Vercel --> CompareAPI[Serverless /api/compare API Route]
+        SearchAPI --> BM25Engine[In-Memory BM25Okapi Engine]
+        SearchAPI --> GeminiLLM[Google Gemini 1.5 Legal Synthesis]
+        CompareAPI --> GeminiLLM
+    end
 ```
 
-### 1. Frontend Deployment (Vercel)
-- Deploy the `frontend/` directory directly to **Vercel** with one click.
-- Configure Environment Variable: `NEXT_PUBLIC_API_URL=https://your-backend-api.onrender.com`.
+### 🌟 1. All-in-One Vercel Deployment (Live & Recommended)
+- **Live URL**: **[https://justice-rag-gilt.vercel.app](https://justice-rag-gilt.vercel.app)**
+- **How it works**: Deploys both the frontend and the `/api/search` & `/api/compare` serverless API routes in a single repository on Vercel.
+- **Setup**:
+  1. Import `sassysohom48/JusticeRAG` on **[Vercel](https://vercel.com)**.
+  2. Set **Root Directory** to `frontend`.
+  3. Add Environment Variable: `GEMINI_API_KEY=your_key`.
+  4. Click **Deploy**.
 
-### 2. Backend Deployment (Render / Railway / AWS EC2)
-- Containerize the backend using **Docker**:
-  ```dockerfile
-  FROM python:3.11-slim
-  WORKDIR /app
-  COPY requirements.txt .
-  RUN pip install --no-cache-dir -r requirements.txt
-  COPY . .
-  CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+---
+
+### 🐳 2. Alternative Dedicated Backend (FastAPI + Docker Compose)
+If you prefer running a dedicated long-running Python FastAPI daemon with local Qdrant vector storage on a VPS (AWS EC2 / DigitalOcean / Render):
+- Run using **Docker Compose**:
+  ```bash
+  docker compose up --build
   ```
-- Set Environment Variables: `GEMINI_API_KEY=your_key` and `PORT=8080`.
-
-### 3. Vector Database (Qdrant Cloud)
-- Switch from local embedded `qdrant_db` to a free-tier managed **Qdrant Cloud Cluster** by providing `QDRANT_URL` and `QDRANT_API_KEY` in `backend/main.py`.
+- Or deploy `backend/` with `uvicorn main:app --host 0.0.0.0 --port $PORT`.
 
 ---
 
