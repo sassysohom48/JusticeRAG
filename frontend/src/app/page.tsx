@@ -32,7 +32,7 @@ export default function Home() {
     "Notice to quit under Section 106 Transfer of Property Act mandatory or not?"
   ];
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
   const handleSearch = async (e?: React.FormEvent, searchQuery?: string, searchMode?: string) => {
     if (e) e.preventDefault();
@@ -44,7 +44,8 @@ export default function Home() {
     setComparisonText(null);
     setActiveMode(m);
     try {
-      const res = await fetch(`${API_BASE_URL}/search`, {
+      const endpoint = API_BASE_URL ? `${API_BASE_URL}/search` : `/api/search`;
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q, mode: m, top_k: 4 }),
@@ -56,7 +57,7 @@ export default function Home() {
       setSelectedCaseIds(cases.slice(0, 3).map((c: CasePrecedent) => c.id));
     } catch (error) {
       console.error("Error searching:", error);
-      alert(`Failed to connect to JusticeRAG Backend on ${API_BASE_URL}. Please ensure the backend is running.`);
+      alert(`Search failed. Please check connection.`);
     } finally {
       setLoading(false);
     }
@@ -87,7 +88,8 @@ export default function Home() {
     setComparing(true);
     setShowModal(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/compare`, {
+      const endpoint = API_BASE_URL ? `${API_BASE_URL}/compare` : `/api/compare`;
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query, cases: selectedCases }),
@@ -96,7 +98,7 @@ export default function Home() {
       setComparisonText(data.comparison || "No comparison generated.");
     } catch (error) {
       console.error("Error comparing cases:", error);
-      setComparisonText("Failed to generate comparative synthesis. Please check backend connection.");
+      setComparisonText("Failed to generate comparative synthesis.");
     } finally {
       setComparing(false);
     }
