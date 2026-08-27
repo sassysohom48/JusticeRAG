@@ -19,10 +19,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       comparison,
     });
-  } catch (error: any) {
-    console.error("API /api/compare error:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("API /api/compare error:", err);
     return NextResponse.json(
-      { error: "Comparison failed", detail: error?.message || "Internal error" },
+      { error: "Comparison failed", detail: err?.message || "Internal error" },
       { status: 500 }
     );
   }

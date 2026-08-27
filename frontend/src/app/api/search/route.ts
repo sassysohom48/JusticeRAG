@@ -20,10 +20,11 @@ export async function POST(req: NextRequest) {
       count: results.length,
       results,
     });
-  } catch (error: any) {
-    console.error("API /api/search error:", error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("API /api/search error:", err);
     return NextResponse.json(
-      { error: "Search failed", detail: error?.message || "Internal error" },
+      { error: "Search failed", detail: err?.message || "Internal error" },
       { status: 500 }
     );
   }

@@ -348,7 +348,7 @@ export default function Home() {
                     Judgment & Ratio Decidendi
                   </h4>
                   <p className="text-slate-200 text-sm leading-relaxed bg-slate-950/50 p-3.5 rounded-xl border border-slate-800/60 font-serif italic">
-                    "{caseItem.judgment}"
+                    &quot;{caseItem.judgment}&quot;
                   </p>
                 </div>
 
