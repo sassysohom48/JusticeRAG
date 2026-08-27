@@ -1,5 +1,6 @@
 # ⚖️ JusticeRAG: Retrieval-Augmented Legal Precedent Discovery for Indian Case Law
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-success.svg?logo=vercel&logoColor=white)](https://justice-rag-gilt.vercel.app)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016%20(Turbopack)-black.svg?logo=next.js&logoColor=white)](https://nextjs.org)
 [![Qdrant](https://img.shields.io/badge/Vector%20DB-Qdrant-red.svg?logo=qdrant&logoColor=white)](https://qdrant.tech)
@@ -8,6 +9,8 @@
 [![LLM](https://img.shields.io/badge/LLM-Google%20Gemini-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> **🌐 Live Production Web Application:** **[https://justice-rag-gilt.vercel.app](https://justice-rag-gilt.vercel.app)**
+>
 > **⚖️ Ethical & Legal Positioning Notice:**  
 > **JusticeRAG is engineered strictly as a Legal Research Assistance Platform** for advocates, researchers, judicial clerks, and law students. It is **not** legal advice and does not create an attorney-client relationship. All generative outputs are strictly grounded on verified Indian judicial records.
 
