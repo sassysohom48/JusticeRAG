@@ -233,11 +233,10 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => handleModeChange("hybrid")}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    mode === "hybrid"
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${mode === "hybrid"
                       ? "bg-indigo-600 text-white shadow-sm"
                       : "text-slate-400 hover:text-slate-200"
-                  }`}
+                    }`}
                 >
                   <span>⚡ Hybrid Legal RAG</span>
                   <span className="text-[10px] bg-indigo-950 px-1 rounded text-indigo-200 border border-indigo-800">
@@ -248,11 +247,10 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => handleModeChange("semantic")}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    mode === "semantic"
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${mode === "semantic"
                       ? "bg-indigo-600 text-white shadow-sm"
                       : "text-slate-400 hover:text-slate-200"
-                  }`}
+                    }`}
                 >
                   <span>🎯 Dense Semantic</span>
                   <span className="text-[10px] bg-slate-900 px-1 rounded text-slate-300 border border-slate-700">
@@ -263,11 +261,10 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => handleModeChange("keyword")}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                    mode === "keyword"
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${mode === "keyword"
                       ? "bg-indigo-600 text-white shadow-sm"
                       : "text-slate-400 hover:text-slate-200"
-                  }`}
+                    }`}
                 >
                   <span>🔍 Keyword</span>
                   <span className="text-[10px] bg-slate-900 px-1 rounded text-slate-300 border border-slate-700">
@@ -361,8 +358,8 @@ export default function Home() {
                     {activeMode === "keyword"
                       ? "BM25 Sparse Search"
                       : activeMode === "semantic"
-                      ? "Dense Semantic (BGE)"
-                      : "Hybrid RRF Consensus"}
+                        ? "Dense Semantic (BGE)"
+                        : "Hybrid RRF Consensus"}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
@@ -391,11 +388,10 @@ export default function Home() {
                 return (
                   <div
                     key={caseItem.id}
-                    className={`bg-[#0d121f] border rounded-xl p-6 transition-all shadow-xl relative ${
-                      isSelected
+                    className={`bg-[#0d121f] border rounded-xl p-6 transition-all shadow-xl relative ${isSelected
                         ? "border-indigo-500/80 ring-1 ring-indigo-500/40"
                         : "border-slate-800 hover:border-slate-700"
-                    }`}
+                      }`}
                   >
                     {/* Top Case Bar */}
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-800/80 mb-5">
@@ -432,11 +428,10 @@ export default function Home() {
                         </button>
 
                         <span
-                          className={`text-xs px-2.5 py-1 rounded-md font-mono font-bold border ${
-                            caseItem.similarity >= 0.8
+                          className={`text-xs px-2.5 py-1 rounded-md font-mono font-bold border ${caseItem.similarity >= 0.8
                               ? "bg-emerald-950/60 text-emerald-300 border-emerald-800"
                               : "bg-indigo-950/60 text-indigo-300 border-indigo-800"
-                          }`}
+                            }`}
                         >
                           Match: {scorePercent}%
                         </span>
@@ -601,7 +596,7 @@ export default function Home() {
 
             <div className="p-6 overflow-y-auto space-y-5 text-slate-200 text-xs sm:text-sm bg-[#0a0f1a]">
               <p className="text-slate-300">
-                Empirical evaluation comparing **Keyword Search (BM25)**, **Dense Semantic Search (BGE)**, and **Hybrid Legal RAG (RRF)** across 5 Indian Supreme Court benchmark queries:
+                Empirical evaluation comparing Keyword Search (BM25), Dense Semantic Search (BGE), and Hybrid Legal RAG (RRF) across 5 Indian Supreme Court benchmark queries:
               </p>
 
               <div className="overflow-x-auto">
