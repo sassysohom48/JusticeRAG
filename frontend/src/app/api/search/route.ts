@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { executeSearch } from "@/lib/searchEngine";
+import { executeSearch } from "../../../lib/searchEngine";
 
 export async function POST(req: NextRequest) {
   try {

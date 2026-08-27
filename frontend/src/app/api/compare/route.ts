@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { executeComparison } from "@/lib/searchEngine";
+import { executeComparison } from "../../../lib/searchEngine";
 
 export async function POST(req: NextRequest) {
   try {
