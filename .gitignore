@@ -61,3 +61,7 @@ Thumbs.db
 
 # Intermediate raw downloaded data (keep formatted cases.csv/json)
 backend/data/raw_indian_legal_test.csv
+
+# Private Project Submission Dossier (Excluded from GitHub repository)
+PROJECT_SUBMISSION.md
+SUBMISSION_DOSSIER.md
