@@ -230,3 +230,7 @@ When presenting JusticeRAG to faculty, examiners, or project guides, refer to th
    python evaluate.py
    # View quantitative results in backend/evaluation_report.md
    ```
+
+5. **Exhaustive Viva & Defense Guide**:
+   - Refer to [VIVA_PREP.md](file:///c:/Users/DELL/Desktop/JusticeRAG/VIVA_PREP.md) for complete preparation covering dataset origin, data engineering, math formulas, Article 141 jurisprudence, 20 examiner questions & model answers, and the live demo script.
+
