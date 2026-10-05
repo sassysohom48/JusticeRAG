@@ -3,7 +3,7 @@
 > **Project Title:** JusticeRAG — Domain-Specific Hybrid Retrieval-Augmented Generation & Multi-Case Synthesis for Indian Supreme Court Jurisprudence  
 > **Live Web Application:** [https://justice-rag-gilt.vercel.app](https://justice-rag-gilt.vercel.app)  
 > **GitHub Repository:** [https://github.com/sassysohom48/JusticeRAG](https://github.com/sassysohom48/JusticeRAG)  
-> **Author:** Sohom Mukherjee  
+> **Author:** Sohom Mallick 
 
 ---
 
