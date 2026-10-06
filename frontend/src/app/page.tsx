@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import LegalSynthesisView from "@/components/LegalSynthesisView";
 
 interface CasePrecedent {
   id: number;
@@ -534,9 +535,7 @@ export default function Home() {
                   </div>
                 </div>
               ) : (
-                <div className="font-mono text-xs sm:text-sm bg-slate-950 p-5 rounded-xl border border-slate-800 text-slate-200 whitespace-pre-wrap leading-relaxed shadow-inner">
-                  {comparisonText}
-                </div>
+                <LegalSynthesisView markdownText={comparisonText || ""} />
               )}
             </div>
 
